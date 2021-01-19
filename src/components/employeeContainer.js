@@ -6,9 +6,9 @@ import SearchForm from "./SearchForm";
 import Detail from "./Detail";
 import API from "../utils/API";
 
-class employeeContainer extends Component {
+class EmployeeContainer extends Component {
   state = {
-    result: {},
+    result: [],
     search: ""
   };
 
@@ -18,8 +18,8 @@ class employeeContainer extends Component {
   }
 
   searchEmployee = query => {
-    API.search(query)
-      .then(res => this.setState({ result: res.data }))
+    API.getUsers(query)
+      .then(res => this.setState({ result: res.data.results }))
       .catch(err => console.log(err));
   };
 
@@ -63,15 +63,14 @@ class employeeContainer extends Component {
                   <th>City</th>
                 </tr>
               </thead>
-              {[...this.state.employees].map((item) => (
-                <EmployeeCard
+              {[...this.state.result].map((item) => (
+                <Card
                   picture={item.picture}
-                  firstName={item.firstName}
-                  lastName={item.lastName}
+                  firstName={item.name.first}
+                  lastName={item.name.last}
                   email={item.email}
                   phone={item.phone}
-                  city={item.city}
-                  key={item.key}
+                  city={item.location.city}
                 />
               ))}
             </table>
@@ -81,4 +80,4 @@ class employeeContainer extends Component {
     );
   }
 }
-export default employeeContainer;
+export default EmployeeContainer;

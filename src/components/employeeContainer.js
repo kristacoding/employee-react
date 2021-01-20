@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import Container from "./Container";
 import Row from "./Row";
 import Card from "./Card";
+import Wrapper from "./Wrapper";
 import SearchForm from "./SearchForm";
-import Detail from "./Detail";
+
 import API from "../utils/API";
 
 class EmployeeContainer extends Component {
@@ -14,8 +15,23 @@ class EmployeeContainer extends Component {
 
   // When this component mounts, search for specific employee
   componentDidMount() {
-    this.searchEmployee("");
+    API.getUsers()
+      .then((res) => {
+        this.setState({
+          employees: res.data.results.map((e, i) => ({
+            firstName: e.name.first,
+            lastName: e.name.last,
+            picture: e.picture.large,
+            email: e.email,
+            phone: e.phone,
+            city: e.location.city,
+            key: i,
+          })),
+        });
+      })
+      .catch((err) => console.log(err));
   }
+
 
   searchEmployee = query => {
     API.getUsers(query)
@@ -39,44 +55,47 @@ class EmployeeContainer extends Component {
 
   render() {
     return (
-      <Container>
-        <Row>
-          <h2>Employee Directory</h2>
-          <Card heading="Search">
-            <SearchForm
-              value={this.state.search}
-              handleInputChange={this.handleInputChange}
-              handleFormSubmit={this.handleFormSubmit}
-            />
-          </Card>
-        </Row>
-        <Row>
-          <Card>
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>Photo</th>
-                  <th>First Name</th>
-                  <th>Last Name</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>City</th>
-                </tr>
-              </thead>
-              {[...this.state.result].map((item) => (
-                <Card
-                  picture={item.picture}
-                  firstName={item.name.first}
-                  lastName={item.name.last}
-                  email={item.email}
-                  phone={item.phone}
-                  city={item.location.city}
-                />
-              ))}
-            </table>
-          </Card>
-        </Row>
-      </Container>
+      <Wrapper>
+        <Container>
+          <Row>
+            <h2>Employee Directory</h2>
+            <Card heading="Search">
+              <SearchForm
+                value={this.state.search}
+                handleInputChange={this.handleInputChange}
+                handleFormSubmit={this.handleFormSubmit}
+              />
+            </Card>
+          </Row>
+            <Card>
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Photo</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>City</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[...this.state.result].map((item) => (
+                    <Card
+                      picture={item.picture}
+                      firstName={item.name.first}
+                      lastName={item.name.last}
+                      email={item.email}
+                      phone={item.phone}
+                      city={item.location.city}
+                      key={item.key}
+                    />
+                  ))}
+                </tbody>
+              </table>
+            </Card>
+        </Container>
+      </Wrapper >
     );
   }
 }

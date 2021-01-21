@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Container from "./Container";
-import Row from "./Row";
+import Col from "./Col";
 import Card from "./Card";
 import Wrapper from "./Wrapper";
 import SearchForm from "./SearchForm";
@@ -56,47 +56,50 @@ class EmployeeContainer extends Component {
   render() {
     return (
       <Wrapper>
-        <Container>
-          <Row>
-            <h2>Employee Directory</h2>
-            <Card heading="Search">
+        <div className="container">
+          <div className="row">
+            <Col>
+              <h2>Employee Directory</h2>
               <SearchForm
                 value={this.state.search}
                 handleInputChange={this.handleInputChange}
                 handleFormSubmit={this.handleFormSubmit}
               />
-            </Card>
-          </Row>
-            <Card>
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th>Photo</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>City</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[...this.state.result].map((item) => (
-                    <Card
-                      picture={item.picture}
-                      firstName={item.name.first}
-                      lastName={item.name.last}
-                      email={item.email}
-                      phone={item.phone}
-                      city={item.location.city}
-                      key={item.key}
-                    />
-                  ))}
-                </tbody>
-              </table>
-            </Card>
-        </Container>
-      </Wrapper >
-    );
+            </Col>
+          </div>
+        </div>
+
+        <div className="row">
+          <Col>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Photo</th>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>City</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[...this.state.result].map((item) => (
+                  <Card
+                    picture={item.picture}
+                    firstName={item.name.first}
+                    lastName={item.name.last}
+                    email={item.email}
+                    phone={item.phone}
+                    city={item.location.city}
+                    key={item.key}
+                  />
+                ))}
+              </tbody>
+            </table>
+          </Col>
+        </div>
+      </Wrapper>
+    )
   }
 }
 export default EmployeeContainer;

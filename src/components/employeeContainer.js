@@ -15,25 +15,19 @@ class EmployeeContainer extends Component {
 
   // When this component mounts, search for specific employee
   componentDidMount() {
-    API.getUsers()
-      .then((res) => {
-        this.setState({
-          employees: res.data.results.map((e, i) => ({
-            firstName: e.name.first,
-            lastName: e.name.last,
-            picture: e.picture.large,
-            email: e.email,
-            phone: e.phone,
-            city: e.location.city,
-            key: i,
-          })),
-        });
-      })
-      .catch((err) => console.log(err));
+    this.firstEmployee()
   }
 
+  firstEmployee = () => {
+    API.getUsers()
+    .then(res =>
+      this.setState({result: res.data.results})
+      )
+      .catch(err => console.log(err));
+  }; 
 
-  searchEmployee = query => {
+  searchEmployee = (query) => {
+    console.log(query)
     API.getUsers(query)
       .then(res => this.setState({ result: res.data.results }))
       .catch(err => console.log(err));
@@ -50,7 +44,9 @@ class EmployeeContainer extends Component {
   // When the form is submitted, search the Employee API for the value of `this.state.search`
   handleFormSubmit = event => {
     event.preventDefault();
-    this.searchEmployee(this.state.search);
+    const filteredResults = this.state.result.filter(person => person.name.first.includes(this.state.search))
+    console.log(this.state.search);
+    this.setState({result: filteredResults});
   };
 
   render() {
@@ -67,36 +63,37 @@ class EmployeeContainer extends Component {
               />
             </Col>
           </div>
-        </div>
 
-        <div className="row">
-          <Col>
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>Photo</th>
-                  <th>First Name</th>
-                  <th>Last Name</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>City</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[...this.state.result].map((item) => (
-                  <Card
-                    picture={item.picture}
-                    firstName={item.name.first}
-                    lastName={item.name.last}
-                    email={item.email}
-                    phone={item.phone}
-                    city={item.location.city}
-                    key={item.key}
-                  />
-                ))}
-              </tbody>
-            </table>
-          </Col>
+
+          <div className="row">
+            <Col>
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Photo</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>DOB</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[...this.state.result].map((item) => (
+                    <Card
+                      picture={item.picture.medium}
+                      firstName={item.name.first}
+                      lastName={item.name.last}
+                      email={item.email}
+                      phone={item.phone}
+                      dob={item.dob.date}
+                      key={item.key}
+                    />
+                  ))}
+                </tbody>
+              </table>
+            </Col>
+          </div>
         </div>
       </Wrapper>
     )

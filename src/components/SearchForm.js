@@ -18,6 +18,14 @@ function SearchForm(props) {
         <button onClick={props.handleFormSubmit} className="btn btn-primary">
           Search by First Name
         </button>
+
+        <button onClick={props.clearSearch} className="btn btn-primary">
+          Clear Search
+        </button>
+
+        <button onClick={props.sortSearch} className="btn btn-primary">
+          Sort by Birthday
+        </button>
       </div>
     </form>
   );

@@ -49,6 +49,25 @@ class EmployeeContainer extends Component {
     this.setState({result: filteredResults});
   };
 
+  // Clears search without needing to refresh page
+  clearSearch = event => {
+    event.preventDefault(); 
+    const clear = this.firstEmployee(); 
+    return clear;
+  }
+
+  // Sorts by Birthday
+  sortSearch = event => {
+    event.preventDefault();
+    const dateSortDesc = function (date1, date2) {
+      if (date1 > date2) return -1;
+      if (date1 < date2) return 1;
+      return 0
+    };
+    const sort = this.state.result.sort(dateSortDesc);
+    return sort 
+  }
+
   render() {
     return (
       <Wrapper>
@@ -60,6 +79,8 @@ class EmployeeContainer extends Component {
                 value={this.state.search}
                 handleInputChange={this.handleInputChange}
                 handleFormSubmit={this.handleFormSubmit}
+                clearSearch={this.clearSearch}
+                sortSearch = {this.sortSearch}
               />
             </Col>
           </div>

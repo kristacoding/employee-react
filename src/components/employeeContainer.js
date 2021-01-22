@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Container from "./Container";
 import Col from "./Col";
 import Card from "./Card";
 import Wrapper from "./Wrapper";
